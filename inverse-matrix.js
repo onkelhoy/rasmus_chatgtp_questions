@@ -53,18 +53,20 @@ function getDeterminate(M, mod = 26) {
 
   D = D % mod;
   if (D < 0) D = mod + D;
-
-  
-  console.log(D);
+  D = extended_gcd(D, mod);
   
   const m = [];
   for (let i=0; i<M.length; i++) {
     m.push([]);
     for (let j=0; j<M[i].length; j++) {
-      const X = extended_euclidean_algorithm(i == j, D, mod);
 
-      let v = (X * C[i][j].value) % mod;
-      console.log({X, v, C: C[i][j].value, mod})
+      // we use the transpose matrix (flipping i & j)
+      // we also need to do the mod twice, once for cofactor 
+      let cofactor = (C[j][i].value * Math.pow(-1, i + j + 2)) % mod;
+      if (cofactor < 0) cofactor = mod + cofactor
+
+      // and mod again for the value
+      let v = D * (cofactor) % mod;
 
       if (v < 0) v = mod + v;
       m[i].push(v);
@@ -74,19 +76,17 @@ function getDeterminate(M, mod = 26) {
   return m;
 }
 
-function extended_euclidean_algorithm(v, a, m) {
+function extended_gcd(a, m) {
   a = a % m;
 
   for (let x=1; x<m; x++) {
-    if ((a * x) % m === v)
+    if ((a * x) % m === 1)
     {
       return x;
     }
   }
 
-  console.log()
-
-  throw new Error("[extended_euclidean_algorithm]: could not determine X")
+  throw new Error("[extended_gcd]: could not determine X")
 }
 
 
