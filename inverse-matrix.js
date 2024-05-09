@@ -43,7 +43,7 @@ function getSubmatrix(row, col, M, C) {
 }
 
 
-function getDeterminate(M, mod = 26) {
+function getInverse(M, mod = 26) {
   const C = cofactors(M);
 
   let D = 0
@@ -95,7 +95,7 @@ const A = [
   [3,4,6],
   [8,1,17]
 ]
-const AI = getDeterminate(A);
+const AI = getInverse(A);
 
 console.log('input matrix:')
 console.table(A);
